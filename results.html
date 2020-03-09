@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Runtime</title>
+        <meta name="viewport" content="width=device-width,
+        initial-scale=1">
+        <link href="{{  url_for('static', filename='css/bootstrap.min.css')  }}" rel="stylesheet">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+        <link rel="shortcut icon" href="{{  url_for('static', filename='favicon.ico')  }}">
+        <link href="{{  url_for('static', filename='css/paginate.css')  }}" rel="stylesheet">
+
+    </head>
+    <body>
+
+        {% if data is defined and data | length > 0  %}
+
+        {% if '.' in location %}
+        <h1>
+            Showing results for {{term}} by your location!
+        </h1>
+        {%else%}
+        <h1>
+            Showing results for {{term}} by {{location}}!
+        </h1>
+        {% endif %}
+
+
+
+        <div>
+            <table class="rwd-table table table-responsive">
+                <thead>
+                    <th align="center">Name</th>
+                    <th align="center" valign="middle">Rating</th>
+                    <th align="center">Location</th>
+                    <th align="center" valign="middle">Phone #</th>
+                    <th align="center" valign="middle">Specialty</th>
+                    <th align="center" valign="middle">Distance(mi.)</th>
+                    <th align="center">Est. Run Time</th>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr onclick="window.document.location='{{i.url}}';">
+                        <td data-th="Name">{{i.name}}</td>
+                        <td align="center" valign="middle" data-th="Rating">{{i.rating}}</td>
+                        <td data-th="Address">{{i.location.address1}}</td>
+                        <td data-th="Phone#">{{i.phone}}</td>
+                        <td  align="center" valign="middle" data-th="Category">{{i.categories[0].title}}</td>
+                        <td  align="center" valign="middle" data-th="Distance">{{miles[loop.index0]}}</td>
+                        <td  align="center" valign="middle" data-th="run_times">{{run_times[loop.index0]}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    <div class="spacer">
+        <div class="text-center" style="margin-top: 20px auto">{{ pagination.links }}</div>
+        <div>{{ pagination.info }}</div>
+    </div>
+        {% else %}
+        <h1 id="error">
+            No results found near {{location}}!
+        </h1>
+        {% endif %}
+        <div class="footer">
+            <p style="margin:0">Copyright &copy; 2017 Greg Gershkowitz All Rights Reserved</p>
+        </div>
+
+    </body>
+
+
+</html>

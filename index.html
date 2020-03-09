@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Got Food?</title>
+        <meta name="viewport" content="width=device-width,
+        initial-scale=1">
+        <!-- <link href="{{  url_for('static', filename='css/bootstrap.min.css')  }}" rel="stylesheet"> -->
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+        <link rel="shortcut icon" href="{{  url_for('static', filename='favicon.ico')  }}">
+        <link href="{{  url_for('static', filename='css/paginate.css')  }}" rel="stylesheet">
+    </head>
+    <body>
+    	<p> Got Food? </p>
+    	<p> Enter your location to see your local resturants! </p> 
+
+    	<label for="LOCATION">What is your location?&nbsp;</label>
+            <input size="40" id="LOCATION" type="text" name="location" placeholder="1600 Yelp Ave, Washington, DC">
+            <button type="button" onclick="myLoc()">Get Location</button><br>
+            <br>
+
+         <h3>Only show currently open restaurants?</h3>
+            <input id="inputQues" type="radio" name="open" value="true" checked><label for="inputQues" style="color:white;">&nbsp;Only show currently open</label><br>
+            <input id="inputQues" type="radio" name="open" value="false"><label for="inputQues" style="color:white;">&nbsp;Order when open</label><br>
+
+            <br><br>
+
+            <input type="submit" value="Submit">
+            </form>
+		    <script>
+			function myLoc() {
+		    // Try HTML5 geolocation.
+		    if (navigator.geolocation) {
+		      navigator.geolocation.getCurrentPosition(function(position) {
+		        var pos = {
+		          lat: position.coords.latitude,
+		          lng: position.coords.longitude
+		        };
+		        $("#LOCATION").val(pos.lat+","+pos.lng)
+
+		        console.log('new location: ',pos);
+		      }, function() {
+		        console.log('could not obtain position');
+		        myBackupLocation();
+		      });
+		    } else {
+		      // Browser doesn't support Geolocation
+		      console.log("Browser doesn't support Geolocation");
+		      myBackupLocation();
+		    }
+		}
+		    </script>
+
+	        <script src="fusionAPI.py"></script>
+	        <script>
+	            function myBackupLocation() {
+	                $.get("http://ip-api.com/json", function (response) {
+	                        $("#LOCATION").val(response.countryCode+", "+response.city+" "+response.regionName);
+	                    }, "jsonp");
+	            }
+	        </script>
+    </body>
+</html>
